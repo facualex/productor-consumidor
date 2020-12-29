@@ -1,0 +1,51 @@
+// Archivo: Implementación del problema productor-consumidor con semáforos
+// Autores: Sion-Jei Mamani / Javier Gálvez / Facundo Alexandre
+// Fecha: 28-12-2020
+
+void main() {
+    int tamañoBuffer = 5;
+    int* buffer = new int[tamañoBuffer];
+
+    # TODO: tamañoBuffer debe ser desde input de usuario
+    # TODO: Validar que el tamaño introducido sea menor a la memoria disponible del computador
+
+    void insertarProducto(int producto) {
+
+    }
+
+    void retirarProducto(int indiceEnBuffer) {
+
+    }
+
+    monitor ProductorConsumidor {
+        condition bufferVacio, bufferLleno;
+        int contador;
+        
+        procedure productor(){
+            if (contador === tamañoBuffer) {
+                waitc(bufferLleno); # Buffer se encuentra lleno, bloquear proceso
+            }
+            
+            insertarProducto();
+
+            contador = contador + 1;
+
+            if (contador == 1) {
+               signalc(bufferVacio); # Si el buffer estaba vacío, despertar al consumidor
+            }
+        }
+
+        procedure consumidor() {
+            if (contador == 0) {
+                waitc(bufferVacio); # buffer está vacio, bloquear proceso
+            }
+
+            retirarProducto();
+            contador = contador - 1;
+
+            if (contador == tamañoBuffer - 1) {
+                signalc(bufferLleno); # Si el buffer estaba lleno, despertar al productor
+            }
+        }
+    }
+}
