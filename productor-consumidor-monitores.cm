@@ -1,0 +1,78 @@
+// Archivo: Implementación del problema productor-consumidor con monitores
+// Autores: Sion-Jei Mamani Leon / Javier Gálvez Gonzalez / Facundo Alexandre Buchelli
+// Fecha: 28-12-2020
+
+int buffer[6];
+int i=0;
+int k=0;
+int y=1;
+
+void insertarProducto() {
+	/*
+	Aquí puede ir cualquier operación para generar un producto
+	Por simplicidad, simplemente se introduce un entero autoincrementable al buffer.
+	*/
+	buffer[k]==y;
+	k++;
+	y++;
+}
+
+void retirarProducto() {
+	int indiceFinal = 0;
+        
+        cout << "Consumido: " << buffer[indiceFinal] << endl;
+        /* 
+            Aquí puede realizarse cualquier operación
+            sobre el producto retirado. Por simplicidad,
+            simplemente se desplegará en consola el elemento retirado
+        */
+        buffer[-(indiceFinal)];//buscar forma de elimminar el dato
+}
+
+monitor ProductorConsumidor {
+        condition bufferVacio, bufferLleno;
+        int contador;
+        
+        void productor(){
+            if (contador == 6) {
+                cout << "Buffer lleno, productor bloqueado." << endl;
+                waitc(bufferLleno); // Buffer se encuentra lleno, bloquear proceso
+            }
+            
+            insertarProducto();
+
+            contador++;
+
+            if (contador == 1) {
+               signalc(bufferVacio); // Si el buffer estaba vacío, despertar al consumidor
+            }
+        }
+
+        void consumidor() {
+            if (contador == 0) {
+                cout << "Buffer vacío, consumidor bloqueado." << endl;
+                waitc(bufferVacio); // buffer está vacio, bloquear proceso
+            }
+
+            retirarProducto();
+            contador--;
+
+            if (contador == 6 - 1) {
+                signalc(bufferLleno); // Si el buffer estaba lleno, despertar al productor
+            }
+        }
+    }
+void main() {
+    int numeroDeConsumidores;
+
+    cout << "Ingrese número de consumidores: ";
+    cin >> numeroDeConsumidores;
+
+    // Inicialización, 1 productor, multiples consumidores
+    productor();
+    for ( i; i < numeroDeConsumidores; i++) {
+        cobegin {
+            consumidor();
+        }
+    }
+}
